@@ -1,0 +1,14 @@
+#chart {
+  width: 2000px;
+  height: 750px;
+  display: flex;
+  flex-direction: row;
+}
+#lineChart {
+  width: 1000px;
+  height: 750px;
+}
+#barChart {
+  width: 1000px;
+  height: 750px;
+}

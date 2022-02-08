@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+  <head>
+    <title>Sentiment Analysis of Entered Tweet</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,300,500" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home/css/open-iconic-bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/animate.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/owl.theme.default.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/magnific-popup.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/aos.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/bootstrap-datepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/jquery.timepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/flaticon.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/icomoon.css' %}">
+    <link rel="stylesheet" href="{% static 'home/css/style.css' %}">
+
+    <!-- searchbox css -->
+    <link rel="stylesheet" href="{% static 'type/css/searchbox.css' %}">
+
+    <!-- icons -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+    <!-- insertion templates -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400">        
+  	<link rel="stylesheet" href="{% static 'insertion/css/tooplate-style.css' %}">
+  	<link rel="stylesheet" href="{% static 'insertion/css/fontawesome-all.min.css' %}"> 
+
+<!-- lapsus static -->
+    <link href="{% static 'lapsus/css/font-awesome.min.css' %}" rel="stylesheet">   
+    <!-- Custom CSS -->
+    <link href="{% static 'lapsus/css/style.css' %}" rel="stylesheet">
+
+
+  </head>
+  <style>
+
+/*
+=====
+RESET STYLES
+=====
+*/
+
+.field__input{ 
+  --uiFieldPlaceholderColor: var(--fieldPlaceholderColor, black);
+  
+  background-color: transparent;
+  border-radius: 0;
+  border: none;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.field__input:focus::-webkit-input-placeholder{
+  color: var(--uiFieldPlaceholderColor);
+}
+
+.field__input:focus::-moz-placeholder{
+  color: var(--uiFieldPlaceholderColor);
+}
+
+/*
+=====
+CORE STYLES
+=====
+*/
+
+.field{
+  --uiFieldBorderWidth: var(--fieldBorderWidth, 2px);
+  --uiFieldPaddingRight: var(--fieldPaddingRight, 1rem);
+  --uiFieldPaddingLeft: var(--fieldPaddingLeft, 1rem);   
+  --uiFieldBorderColorActive: var(--fieldBorderColorActive, rgba(22, 22, 22, 1));
+
+  display: var(--fieldDisplay, inline-flex);
+  position: relative;
+  font-size: var(--fieldFontSize, 1rem);
+}
+
+.field__input{
+  box-sizing: border-box;
+  width: var(--fieldWidth, 100%);
+  height: var(--fieldHeight, 3rem);
+  padding: var(--fieldPaddingTop, 1.25rem) var(--uiFieldPaddingRight) var(--fieldPaddingBottom, .5rem) var(--uiFieldPaddingLeft);
+  border-bottom: var(--uiFieldBorderWidth) solid var(--fieldBorderColor, rgba(0, 0, 0, .25));  
+}
+
+.field__input:focus{
+  outline: none;
+}
+
+.field__input::-webkit-input-placeholder{
+  opacity: 0;
+  transition: opacity .2s ease-out;
+}
+
+.field__input::-moz-placeholder{
+  opacity: 0;
+  transition: opacity .2s ease-out;
+}
+
+.field__input:focus::-webkit-input-placeholder{
+  opacity: 1;
+  transition-delay: .2s;
+}
+
+.field__input:focus::-moz-placeholder{
+  opacity: 1;
+  transition-delay: .2s;
+}
+
+.field__label-wrap{
+  box-sizing: border-box;
+  pointer-events: none;
+  cursor: text;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.field__label-wrap::after{
+  content: "";
+  box-sizing: border-box;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.field__input:focus ~ .field__label-wrap::after{
+  opacity: 1;
+}
+
+.field__label{
+  position: absolute;
+  left: var(--uiFieldPaddingLeft);
+  top: calc(50% - .5em);
+
+  line-height: 1;
+  font-size: var(--fieldHintFontSize, inherit);
+
+  transition: top .2s cubic-bezier(0.9, -0.15, 0.1, 1.15), opacity .2s ease-out, font-size .2s ease-out;
+  will-change: bottom, opacity, font-size;
+}
+
+.field__input:focus ~ .field__label-wrap .field__label,
+.field__input:not(:placeholder-shown) ~ .field__label-wrap .field__label{
+  --fieldHintFontSize: var(--fieldHintFontSizeFocused, .75rem);
+
+  top: var(--fieldHintTopHover, .25rem);
+}
+
+/* 
+effect 1
+*/
+
+.field_v1 .field__label-wrap::after{
+  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  transition: opacity .2s ease-out;
+  will-change: opacity;
+}
+
+/* 
+effect 2
+*/
+
+.field_v2 .field__label-wrap{
+  overflow: hidden;
+}
+
+.field_v2 .field__label-wrap::after{
+  border-bottom: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  transform: translate3d(-105%, 0, 0);
+  will-change: transform, opacity;
+  transition: transform .285s ease-out .2s, opacity .2s ease-out .2s;
+}
+
+.field_v2 .field__input:focus ~ .field__label-wrap::after{
+  transform: translate3d(0, 0, 0);
+  transition-delay: 0;
+}
+
+/*
+effect 3
+*/
+
+.field_v3 .field__label-wrap::after{
+  border: var(--uiFieldBorderWidth) solid var(--uiFieldBorderColorActive);
+  will-change: opacity, height;
+  transition: height .2s ease-out, opacity .2s ease-out;
+}
+
+.field_v3 .field__input:focus ~ .field__label-wrap::after{
+  height: 100%;
+}
+
+/*
+=====
+LEVEL 4. SETTINGS
+=====
+*/
+
+.field{
+  --fieldBorderColor: #D1C4E9;
+  --fieldBorderColorActive: #673AB7;
+}
+
+/*
+=====
+DEMO
+=====
+*/
+
+body{
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Open Sans, Ubuntu, Fira Sans, Helvetica Neue, sans-serif;
+  margin: 0;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page{
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  padding: 1rem;
+
+  display: grid;
+  grid-gap: 30px;
+}
+button1{
+ display:inline-block;
+ padding:0.35em 1.2em;
+ border:0.1em solid #FFFFFF;
+ margin:0 0.3em 0.3em 0;
+ border-radius:0.12em;
+ box-sizing: border-box;
+ text-decoration:none;
+ font-family:'Roboto',sans-serif;
+ font-weight:300;
+ color:blue;
+ text-align:center;
+ transition: all 0.2s;
+}
+button1:hover{
+ color:#000000;
+ background-color:#FFFFFF;
+}
+@media all and (max-width:30em){
+ button1{
+  display:block;
+  margin:0.4em auto;
+ }
+}
+  </style>
+  <body>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar" data-aos="fade-down" data-aos-delay="500">
+      <div class="container">
+        <a class="navbar-brand" href="/">Home</a>
+        <div class="collapse navbar-collapse" id="ftco-nav">
+          <!-- <ul class="navbar-nav ml-auto">
+            <li class="nav-item"><a href="/sentiment" class="nav-link">Sentiment Analysis</a></li>
+            <li class="nav-item"><a href="/emotion" class="nav-link">Emotion Analysis</a></li>
+          </ul> -->
+        </div>
+      </div>
+    </nav>
+    <!-- END nav -->
+
+    <section class="ftco-cover"  id="section-home" style="background-image: url({% static 'home/images/back.jpeg' %});"  data-aos="fade"  data-stellar-background-ratio="0.5">
+      <div class="container">
+        <div class="row align-items-center ftco-vh-100">
+          <div class="col-md-7">
+            <h1 class="ftco-heading mb-3" data-aos="fade-up" data-aos-delay="500">Sentiment Analysis</h1>
+            <h2 class="h5 ftco-subheading mb-5" data-aos="fade-up"  data-aos-delay="600">Categorises Review under Positive, Neutral or Negative</h2>
+              <div class="row">
+                  <div class="box counter-left md-5 col-2" data-aos="fade-up" data-aos-delay="700">
+                  <img src="{% static 'icons/positive.png' %}">
+                  </div>
+                  <div class="box counter-left md-5 col-2" data-aos="fade-up" data-aos-delay="700">
+                  <img src="{% static 'icons/neutral.png' %}">
+                  </div>
+                  <div class="box counter-left md-5 col-2" data-aos="fade-up" data-aos-delay="700">
+                  <img src="{% static 'icons/negative.png' %}">
+                  </div>
+              </div>
+          </div>
+        </div>   
+
+       <div class="container feature" data-aos="fade-up">
+          
+              <form class="search" method="post", action="{% url 'sentiment_results' %}">
+               
+                {% csrf_token %}
+               <div class="row">
+               <div class="col-6">
+                   <div class="feature-item">
+                  <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.a }}
+                   
+                 </li>
+                 
+               </div>
+              </div>
+
+
+               <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.b }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+               <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.c }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+               <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.d }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.e }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.f }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.g }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.h }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.i }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+              <div class="col-6">
+                   <div class="feature-item">
+                   <li style="background-color: rgba(0,0,0,0.1);border: none;">
+
+                    {{ form.j }}
+                   
+                 </li>
+                
+               </div>
+              </div>
+                   <div class="col-6", style="margin:auto;">
+                   <div class="feature-item">
+
+                  <button class="button1" type="submit", style="background-color:transparent;">
+                  <span >Submit</span>
+                  </button>
+                   </div>
+                  </div>
+                  
+            </div>
+
+
+                                
+                  <!-- </div> -->
+                  
+              </form>
+
+
+            
+       </div>
+<!-- </div> -->
+
+
+
+          </div>
+    </section>
+    <!-- END section -->
+    
+    <!-- END section -->
+
+
+
+
+
+  
+
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
+
+
+  <script src="{% static 'register/js/jquery.min.js' %}"></script>
+  <script src="{% static 'register/js/jquery-migrate-3.0.1.min.js' %}"></script>
+  <script src="{% static 'register/js/popper.min.js' %}"></script>
+  <script src="{% static 'register/js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'register/js/jquery.easing.1.3.js' %}"></script>
+  <script src="{% static 'register/js/jquery.waypoints.min.js' %}"></script>
+  <script src="{% static 'register/js/jquery.stellar.min.js' %}"></script>
+  <script src="{% static 'register/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static 'register/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static 'register/js/aos.js' %}"></script>
+  <script src="{% static 'register/js/jquery.animateNumber.min.js' %}"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+  <script src="{% static 'register/js/google-map.js' %}"></script>
+  <script src="{% static 'register/js/main.js' %}"></script>
+    <script src="{% static 'register/othertemplate/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static 'register/othertemplate/js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'register/othertemplate/js/main.js' %}"></script>
+
+    <!-- insertion static -->
+
+    <!-- <script src="{% static 'insertion/js/jquery-3.2.1.slim.min.js' %}"></script> -->
+
+    <!-- lapsus static -->
+    
+    <script src="{% static 'lapsus/js/jquery.js' %}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{% static 'lapsus/js/bootstrap.min.js' %}"></script>
+    <!-- Respond JS for IE8 -->
+    <script src="{% static 'lapsus/js/respond.min.js' %}"></script>
+    <!-- HTML5 Support for IE -->
+    <script src="{% static 'lapsus/js/html5shiv.js' %}"></script>
+    <!-- Custom JS -->
+    <script src="{% static 'lapsus/js/custom.js' %}"></script>
+
+    <!-- searchbox type js -->
+    <script src="{% static 'type/js/search_box.js' %}"></script>
+
+  </body>
+</html>

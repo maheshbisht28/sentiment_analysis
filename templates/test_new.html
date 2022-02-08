@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %} 
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>Sentiment Analysis</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/animate.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/perfect-scrollbar.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+
+
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/fontAwesome.css' %}">
+        <link rel="stylesheet" href="{% static 'css/light-box.css' %}">
+        <link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
+        <link rel="stylesheet" href="{% static 'css/templatemo-style.css' %}">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+        <script src="{% static 'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js' %}"></script>
+    </head>
+
+  <style>
+
+
+body, table, input, select, textarea {
+
+}
+
+
+.graph {
+  margin-bottom:1em;
+  font:normal 100%/150% arial,helvetica,sans-serif;
+}
+
+.graph caption {
+  font:bold 150%/120% arial,helvetica,sans-serif;
+  padding-bottom:0.33em;
+}
+
+.graph tbody th {
+  text-align:right;
+}
+
+@supports (display:grid) {
+
+  @media (min-width:32em) {
+
+    .graph {
+      display:block;
+      width:600px;
+      height:300px;
+      margin-left: auto;
+  margin-right: auto;
+    }
+
+    .graph caption {
+      display:block;
+    }
+
+    .graph thead {
+      display:none;
+    }
+
+    .graph tbody {
+      position:relative;
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(2em, 1fr));
+      column-gap:2.5%;
+      align-items:end;
+      height:100%;
+      margin:3em 0 1em 2.8em;
+      padding:0 1em;
+      border-bottom:2px solid rgba(0,0,0,0.5);
+      background:repeating-linear-gradient(
+        180deg,
+        rgba(170,170,170,0.7) 0,
+        rgba(170,170,170,0.7) 1px,
+        transparent 1px,
+        transparent 20%
+      );
+    }
+
+    .graph tbody:before,
+    .graph tbody:after {
+      position:absolute;
+      left:-3.2em;
+      width:2.8em;
+      text-align:right;
+      font:bold 80%/120% arial,helvetica,sans-serif;
+    }
+
+    .graph tbody:before {
+      content:"100%";
+      top:-0.6em;
+    }
+
+    .graph tbody:after {
+      content:"0%";
+      bottom:-0.6em;
+    }
+
+    .graph tr {
+      position:relative;
+      display:block;
+    }
+
+    .graph tr:hover {
+      z-index:999;
+    }
+
+    .graph th,
+    .graph td {
+      display:block;
+      text-align:center;
+    }
+
+    .graph tbody th {
+     position: absolute;
+    top: -5em;
+    left: 0;
+    width: 100%;
+    font-weight: normal;
+    text-align: center;
+    white-space: nowrap;
+    text-indent: 0;
+    transform: inherit;
+    }
+
+    .graph tbody th:after {
+      content:"";
+    }
+
+    .graph td {
+      width:100%;
+      height:100%;
+      background:skyblue;
+      border-radius:0.5em 0.5em 0 0;
+      transition:background 0.5s;
+    }
+
+    .graph tr:hover td {
+      opacity:0.7;
+    }
+
+    .graph td span {
+      overflow:hidden;
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:0;
+      padding:0.5em 0;
+      margin:-1em 0 0;
+      font:normal 85%/120% arial,helvetica,sans-serif;
+/*      background:white; */
+/*      box-shadow:0 0 0.25em rgba(0,0,0,0.6); */
+      font-weight:bold;
+      opacity:0;
+      transition:opacity 0.5s;
+      color:white;
+    }
+
+    .toggleGraph:checked + table td span,
+    .graph tr:hover td span {
+      width:4em;
+      margin-left:-2em; /* 1/2 the declared width */
+      opacity:1;
+    }
+
+
+/* strong {
+
+    background: yellow;
+    font-size:50px;
+  }*/
+    
+
+
+  } /* min-width:32em */
+
+} /* grid only */
+</style>
+<body>
+
+
+
+        <header class="nav-down responsive-nav hidden-lg hidden-md">
+
+        </header>
+
+        <div class="sidebar-navigation hidde-sm hidden-xs">
+            <div class="logo">
+                <a href="#">Sentiment<em>
+                    <br>Analysis</em></a>
+            </div>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="#top">
+                            <span class="rect"></span>
+                            <span class="circle"></span>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#featured">
+                            <span class="rect"></span>
+                            <span class="circle"></span>
+                            Sentment Analysis of Single Text
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#projects">
+                            <span class="rect"></span>
+                            <span class="circle"></span>
+                            Sentment Analysis of More Text
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="#tweeter">
+                            <span class="rect"></span>
+                            <span class="circle"></span>
+                            Onine Tweet
+                        </a>
+                    </li>
+           
+                </ul>
+            </nav>
+            <ul class="social-icons">
+                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                <li><a href="#"><i class="fa fa-behance"></i></a></li>
+            </ul>
+        </div>
+
+        <div class="slider">
+            <div class="Modern-Slider content-section" id="top">
+                <!-- Item -->
+                <div class="item item-1">
+                    <div class="img-fill">
+                    <div class="image"></div>
+                    <div class="info">
+                        <div>
+                          <h1>Sentiment <br>Analysis</h1>
+                          <p> Reviews not only have the power to influence consumer decisions but can strengthen a company’s credibility.<br> Reviews have the power to gain customer trust, and they encourage people to interact with the company.<br> Customer interaction ultimately leads to improved profits for businesses.
+                          	</p>
+<!--                           <div class="white-button button">
+                              <a href="#featured">Discover More</a>
+                          </div> -->
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- // Item -->
+                <!-- Item -->
+              
+                <!-- // Item -->
+                <!-- Item -->
+                
+                <!-- // Item -->
+            </div>
+        </div>
+
+
+        <div class="page-content">
+            <section id="featured" class="content-section">
+                <div class="section-heading">
+                    <h1>Sentment Analysis <br><em>Of Singe Text</em></h1>
+
+                </div>
+                 <form id="theForm"  method="POST">
+                    {% csrf_token %}
+                                  <div class="form-group">
+                                    <label for="text_Data">Text</label>
+                                    <input type="text" class="form-control" id="text_Data" placeholder="text">
+                                    <!-- <div id="text_Data" > -->
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                     
+                                  </div>
+                                  <button type="submit" id="b1" class="btn btn-primary">Submit</button>
+                                  
+                 </form>
+
+
+
+                                <div id="sent_resullt_one">
+                                    
+                                </div>
+                                <!-- <img src="{% static 'icons/positive.png' %}"> -->
+                  <!--               {% ifequal result 'positive' %}
+                                    {% endifequal %} -->
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                 <script>
+
+                                    $(document).on('submit', '#theForm', function(e){
+                                        e.preventDefault();
+                                         // alert("cscs")
+                                        var form_id= $("#theForm")
+                                        $.ajax({
+                                            type:'POST',
+                                            url: "{% url 'sentiment_result' %}",
+                                            data:{a :$('#text_Data').val()  ,'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                                            dataType:"json",
+
+                                            header:{'x-CSRFToken':'{% csrf_token%}'},
+                          
+                                            
+                                            success:function(json){
+                                 
+                                                console.log("success");
+                                                
+                $("#sent_resullt_one").html("<tr><td><strong>"+json.success+"</strong></td><td></tr>").css({'background-color': 'powderblue','width':'400px','font-size':'22px','text-align':'center',
+                    'font-style': 'italic'});
+
+
+                                            }     
+
+                                        })
+                                    });
+                                    $(document).on('submit', '#theForm_new', function(e){
+                                        e.preventDefault();
+                                         // alert("cscs")
+                                        var form_id= $("#theForm_new")
+                                        $.ajax({
+                                            type:'POST',
+                                            url: "{% url 'sentiment_results' %}",
+                                            data:{a :$('#text_a').val(),
+                                            b :$('#text_b').val(),
+                                            c :$('#text_c').val(),
+                                            d :$('#text_d').val(),
+                                            e :$('#text_e').val(),
+                                            f :$('#text_f').val(),
+                                            g :$('#text_g').val(),
+                                            h :$('#text_h').val(),
+                                            i :$('#text_i').val(),
+                                            j :$('#text_j').val(),
+
+                                            'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                                            dataType:"json",
+
+                                            header:{'x-CSRFToken':'{% csrf_token%}'
+                                        },
+                                     
+                                            success:function(json){
+                                                // alert("ucce");
+                                                console.log(json[0]);
+
+                                                console.log("success");
+                                                
+                // $("#sent_resullt_more").html("<tr><td><strong>"+json+"</strong></td></tr>");
+                              // var dat = json
+                                var k=0;
+                                  // console.log(json)               
+                                 for (var a in json) {
+                              
+                               if (json[a]=='positive') {
+                                             $("#sent_resullt_more"+k).html("<td><strong>"+json[a]+"</strong></td>").css({'background-color': 'powderblue','width':'101px','font-size':'20px','text-align':'center',
+                                  'font-style': 'italic'});
+                                          }
+                               else
+                               {
+                                $("#sent_resullt_more"+k).html("<td><strong>"+json[a]+"</strong></td>").css({'background-color': 'lightsalmon','width':'101px','font-size':'20px','text-align':'center',
+                                  'font-style': 'inherit'});
+                               }                                        
+                                  console.log(k);
+                                  k++;
+                                           }
+
+
+
+
+                                            }     
+
+                                        })
+                                    });
+                                     $(document).on('submit', '#theForm_hash', function(e){
+                                        e.preventDefault();
+                                         // alert("cscs")
+                                         console.log("$('#text_h').val()", $('#text_hash').val())
+                                        var form_id= $("#theForm_hash")
+                                        $.ajax({
+                                            type:'POST',
+                                            url: "{% url 'hasshh' %}",
+                                            data:{h :$('#text_hash').val(),
+                                             'csrfmiddlewaretoken': '{{ csrf_token }}' },
+                                            dataType:"json",
+
+                                            header:{'x-CSRFToken':'{% csrf_token%}'
+                                        },
+                                     
+                                            success:function(json){
+                                                // alert("ucce");
+                                                console.log(json);
+
+                                                console.log("success");
+                                var dat = json
+                                var i=0;
+                                  // console.log(json)               
+                                 for (var x in dat) {
+                               $("#sent_hash"+i).html("</td><strong>"+x+"</strong></td>");
+                               if (dat[x]=='positive') {
+                                             $("#sent_hash_result"+i).html("<td><strong>"+dat[x]+"</strong></td>").css({'background-color': 'powderblue','width':'400px','font-size':'22px','text-align':'center',
+                                  'font-style': 'italic'});
+                                          }
+                               else
+                               {
+                                $("#sent_hash_result"+i).html("<td><strong>"+dat[x]+"</strong></td>").css({'background-color': 'red','width':'400px','font-size':'22px','text-align':'center',
+                                  'font-style': 'italic'});
+                               }                                        
+                                  console.log(x);
+                                  i++;
+                                           }
+
+                                            }     
+
+                                        })
+                                    });
+
+                                 </script>
+                                
+
+                <div class="section-content">
+                    <div class="owl-carousel owl-theme">
+                        
+                    </div>
+                </div>
+            </section>
+            <section id="projects" class="conten-section">
+                <div id="text_data" class="section-heading">
+                    <h1>Sentment Analysis <br><em>Of More Text</em></h1>
+                </div>    
+               <form id="theForm_new"  method="POST">
+                    {% csrf_token %}
+                                  <div class="form-group">
+                                    <label for="text_Data">Text</label>
+                                <input type="text" class="form-control" id="text_a" placeholder="text">
+                                    <div id="text_Data1" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_b" placeholder="text">
+                                    <div id="text_Data2" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_c" placeholder="text">
+                                    <div id="text_Data3" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_d" placeholder="text">
+                                    <div id="text_Data4" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_e" placeholder="text">
+                                    <div id="text_Data5" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_f" placeholder="text">
+                                    <div id="text_Data6" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_g" placeholder="text">
+                                    <div id="text_Data7" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_h" placeholder="text">
+                                    <div id="text_Data8" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_i" placeholder="text">
+                                    <div id="text_Data9" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+                                <input type="text" class="form-control" id="text_j" placeholder="text">
+                                    <div id="text_Data10" ></div>
+                                    <!-- {{ form.a }} -->
+                                </input>
+
+                                     
+                                  </div>
+                                  <button type="submit" id="b2" class="btn btn-primary">Submit</button>
+                                  
+                                </form>  
+                                <br>
+                                <br>                  
+                                <div id="sent_resullt_more1"></div>
+                                <div id="sent_resullt_more2"></div>
+                                <div id="sent_resullt_more3"></div> 
+                                <div id="sent_resullt_more4"></div>
+                                <div id="sent_resullt_more5"></div>
+                                <div id="sent_resullt_more6"></div>
+                                <div id="sent_resullt_more7"></div>
+                                <div id="sent_resullt_more8"></div>
+                                <div id="sent_resullt_more9"></div>
+                                <div id="sent_resullt_more10"></div>
+
+                                
+                         
+            </section>
+            <!-- <div class="page-content"> -->
+            <section id="tweeter" class="content-section" style="width:86%;">
+            <!--     <div class="row">
+                     <table class="graph" style="color:blanchedalmond">
+                    
+                      <thead>
+                        <tr>
+                          <th scope="col" style="color:blanchedalmond">Item</th>
+                          <th scope="col" style="color:blanchedalmond">Percent</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                     
+                        <tr style="height:90%">
+                          <th scope="row" style="color:blanchedalmond">Positve</th>
+                          <th><img src="{% static 'icons/positive.png' %}"></th>
+                          <br>
+                          <td id="text_data" >
+                       
+                        </td>
+                        </tr>
+                         <tr style="height:10%">
+                         <th><img src="{% static 'icons/negative.png' %}"></th>
+                          <td><span>
+                          
+                      </span></td>
+                        </tr>
+                        <tr style="height:20%">
+                          
+                          <th><img src="{% static 'icons/neutral.png' %}"></th>
+                          <td><span>
+                          
+                      </span></td>
+                        </tr>
+                       
+                        </tr> 
+                      </tbody>
+                     </table> 
+                    
+
+                </div> -->
+                <div id="text_data" class="section-heading" >
+                    <h1> Live Tweet <br><em>Analysis</em></h1>
+                </div> 
+                 <form id="theForm_hash"  method="POST">
+                    {% csrf_token %}
+                                  <div class="form-group">
+                                    <label for="text_Data">Entre Hashtag</label>
+                                <input type="text" class="form-control" id="text_hash" placeholder="text">
+                                  
+                                </input>
+                                  </div>
+                      <button type="submit" id="b3" class="btn btn-primary">Submit</button>
+                </form>                                                 
+   <!-- <div id="sent_hash">  </div> -->
+                <div class="row">
+                <div class="limiter" style="width:900px">
+                  <div class="container-table100">
+                    <div class="wrap-table100">
+                      <div class="table100 ver1 m-b-110">
+                 <div id="sent_hash1" >  </div><div id="sent_hash_result1" >  </div>
+
+                 <br>
+                 <div id="sent_hash2" >  </div><div id="sent_hash_result2" >  </div>   
+                 <br>
+                 <div id="sent_hash3" >  </div><div id="sent_hash_result3" >  </div>
+                 <br>
+                 <div id="sent_hash4" >  </div><div id="sent_hash_result4" >  </div>
+                 <br>
+                 <div id="sent_hash5" >  </div><div id="sent_hash_result5" >  </div>
+                 <br>
+                 <div id="sent_hash6" >  </div><div id="sent_hash_result6" >  </div>
+                 <br>
+                 <div id="sent_hash7" >  </div><div id="sent_hash_result7" >  </div>
+                 <br>
+                 <div id="sent_hash8" >  </div><div id="sent_hash_result8" >  </div>
+                 <br>
+                 <div id="sent_hash9" >  </div><div id="sent_hash_result9" >  </div>
+                 <br>
+                 <div id="sent_hash10" >  </div><div id="sent_hash_result10" >  </div>
+
+                                <div class="table100-head">
+                                  <table style="text-align:center;">
+                                    <thead>
+                                      <tr class="row100 head" style="text-align:center;">
+                                        <th class="cell100 column1" style="text-align:center;">Tweets</th>
+                                        <!-- <th class="cell100 column2" style="text-align:center;">Type</th>  -->
+
+                                      </tr>
+                                    </thead>
+                                  </table>
+                                </div>
+                                
+                                 <!-- {% for a in mylist %} -->
+                              
+                                <!-- <div class="table100-body js-pscroll" id="sent_hash" >
+                                   <table>
+                                    <tbody>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash1" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column1">
+                                       <div id="sent_hash_result1" >  </div>
+                                       </td> 
+                                      </tr>
+
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash2" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result2" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash3" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result3" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash4" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result4" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash5" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result5" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash6" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result6" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash7" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result7" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash8" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result8" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash9" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result9" >  </div>
+                                       </td> 
+                                      </tr>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">
+                                        <div id="sent_hash10" >  </div>  </div>
+                                        </td>
+                                       <td class="cell100 column2">
+                                       <div id="sent_hash_result10" >  </div>
+                                       </td> 
+                                      </tr>
+                                     
+ -->
+
+
+
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <!-- {% endfor %} -->
+                               
+
+                     </div> 
+                      </div> 
+                     </div>
+                     </div>   
+                  <!-- <div id="sent_hash">  </div>    -->
+
+                </div>
+
+            </section>
+          </div>
+                        
+            <!-- <section id="tweeter" class="content-section"> -->
+
+                  <!--  <div id="text_data" class="section-heading">
+                    <h1> Live Tweet <br><em>Analysis</em></h1>
+                     </div> 
+                <div class="row">
+                     
+                <div class="limiter" style="width:900px">
+                  <div class="container-table100">
+                    <div class="wrap-table100">
+                      <div class="table100 ver1 m-b-110">
+                                <div class="table100-head">
+                                  <table style="text-align:center;">
+                                    <thead>
+                                      <tr class="row100 head" style="text-align:center;">
+                                        <th class="cell100 column1" style="text-align:center;">Tweets</th>
+                                        <th class="cell100 column2" style="text-align:center;">Type</th>
+
+                                      </tr>
+                                    </thead>
+                                  </table>
+                                </div>
+                                
+                                 {% for a in mylist %}
+                              
+                                <div class="table100-body js-pscroll">
+                                  <table>
+                                    <tbody>
+                                      <tr class="row100 body">
+                                        <td class="cell100 column1">{{ a.0 }}</td>
+                                        <td class="cell100 column2">{{ a.1 }}</td>
+                                      </tr>
+
+
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                                {% endfor %}
+                               
+
+                     </div> 
+                      </div> 
+                     </div>
+                     </div>   
+
+                </div> -->
+            <!-- </section> -->
+          <!--   <section id="blog" class="content-section">
+                        <div class="section-heading">
+                            <h1>About<br><em>Us</em></h1>
+                            <p>Curabitur hendrerit mauris mollis ipsum vulputate rutrum. 
+                            <br>Phasellus luctus odio eget dui imperdiet.</p>
+
+                        </div>
+              
+           </section> -->
+          <!--   <section id="contact" class="content-section">
+                
+                <div id="contact-content">
+                    <div class="section-heading">
+                        <h1>Contact<br><em>Sentra</em></h1>
+                        <p>Curabitur hendrerit mauris mollis ipsum vulputate rutrum. 
+                        <br>Phasellus luctus odio eget dui imperdiet.</p>
+                        
+                    </div>
+                    <div class="section-content">
+                        <form id="contact" action="#" method="post">
+                            <div class="row">
+                                <div class="col-md-4">
+                                  <fieldset>
+                                    <input name="name" type="text" class="form-control" id="name" placeholder="Your name..." required="">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-4">
+                                  <fieldset>
+                                    <input name="email" type="email" class="form-control" id="email" placeholder="Your email..." required="">
+                                  </fieldset>
+                                </div>
+                                 <div class="col-md-4">
+                                  <fieldset>
+                                    <input name="subject" type="text" class="form-control" id="subject" placeholder="Subject..." required="">
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <textarea name="message" rows="6" class="form-control" id="message" placeholder="Your message..." required=""></textarea>
+                                  </fieldset>
+                                </div>
+                                <div class="col-md-12">
+                                  <fieldset>
+                                    <button type="submit" id="form-submit" class="btn">Send Message Now</button>
+                                  </fieldset>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section> -->
+            <section class="footer">
+                <p>Developer &copy; Mahesh Bisht 
+                
+                </p>
+            </section>
+        </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
+
+    <script src="js/vendor/bootstrap.min.js"></script>
+    
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+    <script>
+        // Hide Header on on scroll down
+        var didScroll;
+        var lastScrollTop = 0;
+        var delta = 5;
+        var navbarHeight = $('header').outerHeight();
+
+        $(window).scroll(function(event){
+            didScroll = true;
+        });
+
+        setInterval(function() {
+            if (didScroll) {
+                hasScrolled();
+                didScroll = false;
+            }
+        }, 250);
+
+        function hasScrolled() {
+            var st = $(this).scrollTop();
+            
+            // Make sure they scroll more than delta
+            if(Math.abs(lastScrollTop - st) <= delta)
+                return;
+            
+            // If they scrolled down and are past the navbar, add class .nav-up.
+            // This is necessary so you never see what is "behind" the navbar.
+            if (st > lastScrollTop && st > navbarHeight){
+                // Scroll Down
+                $('header').removeClass('nav-down').addClass('nav-up');
+            } else {
+                // Scroll Up
+                if(st + $(window).height() < $(document).height()) {
+                    $('header').removeClass('nav-up').addClass('nav-down');
+                }
+            }
+            
+            lastScrollTop = st;
+        }
+    </script>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+
+</body>
+</html>
